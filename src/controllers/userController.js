@@ -6,6 +6,12 @@ export const getUsers = async (req, res) => {
   res.json(users);
 };
 
+// GET user by ID
+export const getUserbyId = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.json(user);
+}
+
 // POST new user
 export const createUser = async (req, res) => {
   try {
@@ -16,3 +22,7 @@ export const createUser = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+// UPDATE user by ID
+
+// DELETE user by ID
