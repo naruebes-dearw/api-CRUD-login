@@ -10,7 +10,7 @@ export const getUsers = async (req, res) => {
 export const getUserbyId = async (req, res) => {
   const user = await User.findById(req.params.id);
   res.json(user);
-}
+};
 
 // POST new user
 export const createUser = async (req, res) => {
@@ -23,6 +23,33 @@ export const createUser = async (req, res) => {
   }
 };
 
-// UPDATE user by ID
+// UPDATE user
+export const updateUser = async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      {
+        email: req.body.email,
+      },
+      req.body,
+      {
+        new: true,
+      }
+    );
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
 
-// DELETE user by ID
+// DELETE user
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({
+      email: req.body.email,
+    });
+    res.json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
