@@ -3,12 +3,15 @@ import {
   getRegistedUsers,
   register,
   deleteRegistedUser,
+  login,
 } from "../controllers/registedUserController.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", getRegistedUsers);
-router.post("/", register);
-router.delete("/", deleteRegistedUser);
+router.get("/", authMiddleware, getRegistedUsers);
+router.post("/", authMiddleware, register);
+router.delete("/", authMiddleware, deleteRegistedUser);
+router.post("/login", login);
 
 export default router;
