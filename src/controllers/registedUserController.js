@@ -23,7 +23,7 @@ export const register = async (req, res) => {
   try {
     const { email, password } = req.body || {};
     verifyEmailAndPassword(email, password);
-    const hashedPassword = await bcrypt.hash(toString(password), 10);
+    const hashedPassword = await bcrypt.hash(String(password), 10);
     const user = new User({ email, hashedPassword });
     await user.save();
     res.status(201).json(user);
