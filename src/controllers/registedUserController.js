@@ -9,7 +9,7 @@ export const getRegistedUsers = async (req, res) => {
     if (!users) res.status(404).json("Users not found");
     res.json(users);
   } catch (err) {
-    res.json({ Error: err.message });
+    res.status(400).json({ Error: err.message });
   }
 };
 
@@ -23,12 +23,15 @@ export const register = async (req, res) => {
   try {
     const { email, password } = req.body || {};
     verifyEmailAndPassword(email, password);
+
     const hashedPassword = await bcrypt.hash(String(password), 10);
+
     const user = new User({ email, hashedPassword });
     await user.save();
+
     res.status(201).json(user);
   } catch (err) {
-    res.json({ Error: err.message });
+    res.status(400).json({ Error: err.message });
   }
 };
 
@@ -38,7 +41,7 @@ export const deleteRegistedUser = async (req, res) => {
     const user = await User.findOneAndDelete({ email: req.body.email });
     res.json({ user, message: "User deleted" });
   } catch (err) {
-    res.json({ Error: err.message });
+    res.status(400).json({ Error: err.message });
   }
 };
 
