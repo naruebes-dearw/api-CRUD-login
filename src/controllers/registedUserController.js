@@ -51,14 +51,25 @@ const verifyPassword = (password, hash) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     verifyEmailAndPassword(email, password);
+
     const user = await User.findOne({ email });
-    await bcrypt.compare(password, user.hashedPassword);
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    const isCorrectPassword = await bcrypt.compare(
+      String(password),
+      user.hashedPassword
+    );
+    if (!isCorrectPassword)
+      return res.status(400).json({ message: "Password is incorrect" });
+
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "30s",
+      expiresIn: "1d",
     });
+
     res.json({ token });
   } catch (err) {
-    res.json({ Error: err.message });
+    res.status(400).json({ Error: err.message });
   }
 };
