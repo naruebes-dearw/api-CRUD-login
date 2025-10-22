@@ -1,3 +1,4 @@
 /node_modules
 /side_project
 .env
+.vercel
